@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {SlashCommandBuilder} from '@discordjs/builders';
 import {TYPES} from '../types.js';
 import {inject, injectable} from 'inversify';
@@ -55,6 +55,6 @@ export default class implements Command {
       interaction.deferReply(),
     ]);
 
-    await interaction.editReply(`👍 seeked to ${prettyTime(player.getPosition())}`);
+    await interaction.followUp({content: `👍 seeked to ${prettyTime(player.getPosition())}`, flags: MessageFlags.SuppressNotifications});
   }
 }

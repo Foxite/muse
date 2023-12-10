@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {SlashCommandBuilder} from '@discordjs/builders';
 import {TYPES} from '../types.js';
 import {inject, injectable} from 'inversify';
@@ -28,6 +28,6 @@ export default class implements Command {
     }
 
     player.pause();
-    await interaction.reply('the stop-and-go light is now red');
+    await interaction.reply({content: 'the stop-and-go light is now red', flags: MessageFlags.SuppressNotifications});
   }
 }

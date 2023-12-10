@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {inject, injectable} from 'inversify';
 import {TYPES} from '../types.js';
 import PlayerManager from '../managers/player.js';
@@ -42,6 +42,6 @@ export default class implements Command {
 
     player.removeFromQueue(position, range);
 
-    await interaction.reply(':wastebasket: removed');
+    await interaction.reply({content: ':wastebasket: removed', flags: MessageFlags.SuppressNotifications});
   }
 }

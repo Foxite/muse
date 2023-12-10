@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {TYPES} from '../types.js';
 import {inject, injectable} from 'inversify';
 import PlayerManager from '../managers/player.js';
@@ -28,6 +28,6 @@ export default class implements Command {
 
     player.shuffle();
 
-    await interaction.reply('shuffled');
+    await interaction.reply({content: 'shuffled', flags: MessageFlags.SuppressNotifications});
   }
 }

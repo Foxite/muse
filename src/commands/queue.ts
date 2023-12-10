@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {SlashCommandBuilder} from '@discordjs/builders';
 import {inject, injectable} from 'inversify';
 import {TYPES} from '../types.js';
@@ -27,6 +27,6 @@ export default class implements Command {
 
     const embed = buildQueueEmbed(player, interaction.options.getInteger('page') ?? 1);
 
-    await interaction.reply({embeds: [embed]});
+    await interaction.reply({embeds: [embed], flags: MessageFlags.SuppressNotifications});
   }
 }

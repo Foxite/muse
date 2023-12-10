@@ -1,5 +1,5 @@
 import {inject, injectable} from 'inversify';
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {SlashCommandBuilder} from '@discordjs/builders';
 import {TYPES} from '../types.js';
 import PlayerManager from '../managers/player.js';
@@ -22,6 +22,6 @@ export default class implements Command {
   public async execute(interaction: ChatInputCommandInteraction) {
     this.playerManager.get(interaction.guild!.id).clear();
 
-    await interaction.reply('clearer than a field after a fresh harvest');
+    await interaction.reply({content: 'clearer than a field after a fresh harvest', flags: MessageFlags.SuppressNotifications});
   }
 }

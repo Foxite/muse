@@ -1,5 +1,5 @@
 import {SlashCommandBuilder} from '@discordjs/builders';
-import {APIEmbedField, AutocompleteInteraction, ChatInputCommandInteraction} from 'discord.js';
+import {APIEmbedField, AutocompleteInteraction, ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {inject, injectable} from 'inversify';
 import Command from '.';
 import AddQueryToQueue from '../services/add-query-to-queue.js';
@@ -135,7 +135,7 @@ export default class implements Command {
     });
 
     if (favorites.length === 0) {
-      await interaction.reply('there aren\'t any favorites yet');
+      await interaction.reply({content: 'there aren\'t any favorites yet', flags: MessageFlags.SuppressNotifications});
       return;
     }
 
@@ -179,7 +179,7 @@ export default class implements Command {
       },
     });
 
-    await interaction.reply('👍 favorite created');
+    await interaction.reply({content: '👍 favorite created', flags: MessageFlags.SuppressNotifications});
   }
 
   private async remove(interaction: ChatInputCommandInteraction) {
@@ -202,6 +202,6 @@ export default class implements Command {
 
     await prisma.favoriteQuery.delete({where: {id: favorite.id}});
 
-    await interaction.reply('👍 favorite removed');
+    await interaction.reply({content: '👍 favorite removed', flags: MessageFlags.SuppressNotifications});
   }
 }

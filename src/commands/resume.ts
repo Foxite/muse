@@ -6,7 +6,7 @@ import PlayerManager from '../managers/player.js';
 import {STATUS} from '../services/player.js';
 import {buildPlayingMessageEmbed} from '../utils/build-embed.js';
 import {getMemberVoiceChannel, getMostPopularVoiceChannel} from '../utils/channels.js';
-import {ChatInputCommandInteraction, GuildMember} from 'discord.js';
+import {ChatInputCommandInteraction, GuildMember, MessageFlags} from 'discord.js';
 
 @injectable()
 export default class implements Command {
@@ -40,6 +40,7 @@ export default class implements Command {
     await interaction.reply({
       content: 'the stop-and-go light is now green',
       embeds: [buildPlayingMessageEmbed(player)],
+      flags: MessageFlags.SuppressNotifications,
     });
   }
 }

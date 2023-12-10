@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {TYPES} from '../types.js';
 import {inject, injectable} from 'inversify';
 import PlayerManager from '../managers/player.js';
@@ -38,6 +38,7 @@ export default class implements Command {
       await interaction.reply({
         content: 'keep \'er movin\'',
         embeds: player.getCurrent() ? [buildPlayingMessageEmbed(player)] : [],
+        flags: MessageFlags.SuppressNotifications,
       });
     } catch (_: unknown) {
       throw new Error('no song to skip to');

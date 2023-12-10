@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {SlashCommandBuilder} from '@discordjs/builders';
 import {TYPES} from '../types.js';
 import {inject, injectable} from 'inversify';
@@ -32,6 +32,6 @@ export default class implements Command {
     }
 
     player.stop();
-    await interaction.reply('u betcha, stopped');
+    await interaction.reply({content: 'u betcha, stopped', flags: MessageFlags.SuppressNotifications});
   }
 }

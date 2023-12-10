@@ -1,5 +1,5 @@
 import {SlashCommandBuilder} from '@discordjs/builders';
-import {ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits} from 'discord.js';
+import {ChatInputCommandInteraction, EmbedBuilder, MessageFlags, PermissionFlagsBits} from 'discord.js';
 import {injectable} from 'inversify';
 import {prisma} from '../utils/db.js';
 import Command from './index.js';
@@ -55,7 +55,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 limit updated');
+        await interaction.reply({content: '👍 limit updated', flags: MessageFlags.SuppressNotifications});
 
         break;
       }
@@ -72,7 +72,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 wait delay updated');
+        await interaction.reply({content: '👍 wait delay updated', flags: MessageFlags.SuppressNotifications});
 
         break;
       }
@@ -89,7 +89,7 @@ export default class implements Command {
           },
         });
 
-        await interaction.reply('👍 leave setting updated');
+        await interaction.reply({content: '👍 leave setting updated', flags: MessageFlags.SuppressNotifications});
 
         break;
       }
@@ -114,7 +114,7 @@ export default class implements Command {
 
         embed.setDescription(description);
 
-        await interaction.reply({embeds: [embed]});
+        await interaction.reply({embeds: [embed], flags: MessageFlags.SuppressNotifications});
 
         break;
       }

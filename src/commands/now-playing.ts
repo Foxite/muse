@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {TYPES} from '../types.js';
 import {inject, injectable} from 'inversify';
 import PlayerManager from '../managers/player.js';
@@ -27,6 +27,7 @@ export default class implements Command {
 
     await interaction.reply({
       embeds: [buildPlayingMessageEmbed(player)],
+      flags: MessageFlags.SuppressNotifications,
     });
   }
 }

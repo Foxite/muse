@@ -1,5 +1,5 @@
 /* eslint-disable complexity */
-import {ChatInputCommandInteraction, GuildMember} from 'discord.js';
+import {ChatInputCommandInteraction, GuildMember, MessageFlags} from 'discord.js';
 import {URL} from 'node:url';
 import {inject, injectable} from 'inversify';
 import shuffle from 'array-shuffle';
@@ -140,8 +140,9 @@ export default class AddQueryToQueue {
         statusMsg = 'resuming playback';
       }
 
-      await interaction.editReply({
+      await interaction.followUp({
         embeds: [buildPlayingMessageEmbed(player)],
+        flags: MessageFlags.SuppressNotifications,
       });
     } else if (player.status === STATUS.IDLE) {
       // Player is idle, start playback instead
@@ -162,9 +163,9 @@ export default class AddQueryToQueue {
     }
 
     if (newSongs.length === 1) {
-      await interaction.editReply(`u betcha, **${firstSong.title}** added to the${addToFrontOfQueue ? ' front of the' : ''} queue${extraMsg}`);
+      await interaction.editReply({content: `u betcha, **${firstSong.title}** added to the${addToFrontOfQueue ? ' front of the' : ''} queue${extraMsg}`, flags: MessageFlags.SuppressNotifications});
     } else {
-      await interaction.editReply(`u betcha, **${firstSong.title}** and ${newSongs.length - 1} other songs were added to the queue${extraMsg}`);
+      await interaction.editReply({content: `u betcha, **${firstSong.title}** and ${newSongs.length - 1} other songs were added to the queue${extraMsg}`, flags: MessageFlags.SuppressNotifications});
     }
   }
 }

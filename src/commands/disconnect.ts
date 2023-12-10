@@ -1,4 +1,4 @@
-import {ChatInputCommandInteraction} from 'discord.js';
+import {ChatInputCommandInteraction, MessageFlags} from 'discord.js';
 import {SlashCommandBuilder} from '@discordjs/builders';
 import {TYPES} from '../types.js';
 import {inject, injectable} from 'inversify';
@@ -28,6 +28,6 @@ export default class implements Command {
 
     player.disconnect();
 
-    await interaction.reply('u betcha, disconnected');
+    await interaction.reply({content: 'u betcha, disconnected', flags: MessageFlags.SuppressNotifications});
   }
 }
