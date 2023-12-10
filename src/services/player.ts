@@ -75,6 +75,9 @@ export default class {
   private readonly fileCache: FileCacheProvider;
   private disconnectTimer: NodeJS.Timeout | null = null;
 
+  private nextIdleSound: QueuedSong | null = null;
+  private isPlayingIdleSound = false;
+
   constructor(fileCache: FileCacheProvider, guildId: string) {
     this.fileCache = fileCache;
     this.guildId = guildId;
@@ -277,7 +280,9 @@ export default class {
         const settings = await getGuildSettings(this.guildId);
 
         const {secondsToWaitAfterQueueEmpties} = settings;
-        if (secondsToWaitAfterQueueEmpties !== 0) {
+        if (secondsToWaitAfterQueueEmpties === 0) {
+          this.scheduleIdleSound();
+        } else {
           this.disconnectTimer = setTimeout(() => {
             // Make sure we are not accidentally playing
             // when disconnecting
@@ -293,12 +298,62 @@ export default class {
     }
   }
 
+  scheduleIdleSound() {
+    const delaySeconds = (Math.random() * 60) + 30;
+    //console.log(`Scheduling idle sound in ${delaySeconds}`);
+    this.disconnectTimer = setTimeout(async () => {
+      try {
+        if (this.status === STATUS.IDLE) {
+          await this.playIdleSound();
+        } else {
+          //console.log('Idle sound cancelled; audio playing');
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }, delaySeconds * 1000);
+  }
+
+  async playIdleSound() {
+    //console.log('Playing idle sound');
+    const idleSoundUrls = process.env.IDLESOUNDS.split(';');
+
+    //console.log(idleSoundUrls.join('\n'));
+
+    const idleSoundUrl = idleSoundUrls[Math.floor(Math.random() * idleSoundUrls.length)];
+
+    //console.log('---');
+    //console.log(`Picked ${idleSoundUrl}`);
+
+    this.nextIdleSound = {
+      addedInChannelId: '',
+      requestedBy: '133798410024255488',
+      url: idleSoundUrl,
+      source: MediaSource.HLS,
+      isLive: true,
+      title: 'idle sound',
+      artist: 'idle sound',
+      length: 0,
+      offset: 0,
+      playlist: null,
+      thumbnailUrl: null,
+    };
+    this.isPlayingIdleSound = true;
+
+    await this.play();
+  }
+
   canGoForward(skip: number) {
     return (this.queuePosition + skip - 1) < this.queue.length;
   }
 
   manualForward(skip: number): void {
-    if (this.canGoForward(skip)) {
+    if (this.isPlayingIdleSound) {
+      this.isPlayingIdleSound = false;
+      this.nextIdleSound = null;
+      this.positionInSeconds = 0;
+      this.stopTrackingPosition();
+    } else if (this.canGoForward(skip)) {
       this.queuePosition += skip;
       this.positionInSeconds = 0;
       this.stopTrackingPosition();
@@ -328,6 +383,10 @@ export default class {
   getCurrent(): QueuedSong | null {
     if (this.queue[this.queuePosition]) {
       return this.queue[this.queuePosition];
+    }
+
+    if (this.nextIdleSound) {
+      return this.nextIdleSound;
     }
 
     return null;
