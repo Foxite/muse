@@ -325,7 +325,7 @@ export default class {
 
   async playIdleSound() {
     //console.log('Playing idle sound');
-    const idleSoundUrls = process.env.IDLESOUNDS.split(';');
+    const idleSoundUrls = process.env.IDLESOUNDS ? process.env.IDLESOUNDS.split(';') : [];
 
     //console.log(idleSoundUrls.join('\n'));
 
